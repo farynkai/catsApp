@@ -1,0 +1,14 @@
+<div class="container">
+  <h1 class="title text-center">Cats list</h1>
+  <div class="inputs-block mx-auto">
+    <input [formControl]="searchControl" type="search" class="form-control" placeholder="Search...">
+    <input [formControl]="limitValue" type="number" class="form-control" placeholder="Enter a number..." min="1" max="100">
+  </div>
+  
+  <ul class="cats-list" >
+    <li class="cat-item" *ngFor="let cat of cats">
+      <img class="cat-img" src="{{cat.url}}" alt="cat-image">
+      <div class="text-center fs-5 fw-semibold">{{ cat.breeds.length === 0 ? 'Mutt' : cat.breeds[0].name }}</div>
+    </li>
+  </ul>
+</div>
