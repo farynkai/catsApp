@@ -1,14 +1,13 @@
-import { filterData } from './../../@ngrx/cats-list/cats-list.selectors';
+import { selectData } from './../../store/cats.selectors';
+import { Observable } from 'rxjs';
+import { filterData } from '../../store/cats.selectors';
 import { Cat } from '../../interfaces/сat';
 import { CatsService } from './../../services/cats.service';
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import {
-  setFilterBy,
-  setListData,
-} from 'src/app/@ngrx/cats-list/cats-list.actions';
+import { setFilterBy, setListData } from '../../store/cats.actions';
 import { CatsListState } from './../../interfaces/cats-list';
 
 @Component({
@@ -17,7 +16,7 @@ import { CatsListState } from './../../interfaces/cats-list';
   styleUrls: ['./cats-list.component.scss'],
 })
 export class CatsListComponent {
-  cats: Cat[];
+  cats$: Observable<Cat[]>;
   searchControl = new FormControl('');
   limitValue = new FormControl('');
 
@@ -27,33 +26,24 @@ export class CatsListComponent {
   ) {}
 
   ngOnInit() {
-    this.catsService.getCats().subscribe((cats) => {
-      this.cats = cats;
-      this.store.dispatch(setListData({ data: cats }));
-    });
+    this.store.dispatch(setListData());
+    this.cats$ = this.catsService.selectCats();
 
     this.searchControl.valueChanges.pipe().subscribe((query) => {
       if (query !== null) {
         this.store.dispatch(setFilterBy({ filters: { query } }));
-        this.store
-          .select(filterData)
-          .subscribe((filteredCats) => (this.cats = filteredCats));
+        this.cats$ = this.store.select(filterData);
       }
     });
 
     this.limitValue.valueChanges.subscribe((query) => {
       if (query === null) {
-        this.catsService.getCats().subscribe((cats) => {
-          this.cats = cats;
-          this.store.dispatch(setListData({ data: cats }));
-        });
+        this.store.dispatch(setListData());
       }
       let limit = Number(query);
       if (query !== null && limit >= 1 && limit <= 100) {
-        this.catsService.getCats(limit).subscribe((cats) => {
-          this.cats = cats;
-          this.store.dispatch(setListData({ data: cats }));
-        });
+        this.catsService.setLimit(limit);
+        this.store.dispatch(setListData());
       }
     });
   }

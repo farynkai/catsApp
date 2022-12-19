@@ -1,6 +1,6 @@
-import { CatsListState } from './../../interfaces/cats-list';
+import { CatsListState } from '../interfaces/cats-list';
 import { Action, createReducer, on } from '@ngrx/store';
-import { setFilterBy, setListData } from './cats-list.actions';
+import { setFilterBy, setListDataSuccess } from './cats.actions';
 
 export const INITIAL_STATE: CatsListState = {
   listData: [],
@@ -11,7 +11,7 @@ export const dataListFeatureKey = 'catsList';
 
 export const catsListReducer = createReducer(
   INITIAL_STATE,
-  on(setListData, (state, { data }) => {
+  on(setListDataSuccess, (state, { data }) => {
     return {
       ...state,
       listData: data,

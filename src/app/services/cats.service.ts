@@ -1,3 +1,7 @@
+import { selectData } from './../store/cats.selectors';
+import { Store } from '@ngrx/store';
+import { CatsListState } from './../interfaces/cats-list';
+import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
 import { Cat } from '../interfaces/сat';
 
@@ -8,13 +12,21 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CatsService {
-  constructor(private httpClient: HttpClient) {}
-  readonly API_KEY =
-    'live_KWRFZyBYVvyTXkFekYv2jmMSTIlTcMb9738AksD0JzKRktMhpc4P6lnE0SfHT4QJ';
+  limit: number = 10;
+  constructor(
+    private httpClient: HttpClient,
+    private store: Store<CatsListState>
+  ) {}
 
-  getCats(limit: number = 10): Observable<Cat[]> {
-    return this.httpClient.get<Cat[]>(
-      `https://api.thecatapi.com/v1/images/search?limit=${limit}&has_breeds=1&order=DESC&api_key=${this.API_KEY}`
-    );
+  setLimit(limit: number): void {
+    this.limit = limit;
+  }
+
+  getCats(): Observable<Cat[]> {
+    return this.httpClient.get<Cat[]>(`${environment.url}images/search`);
+  }
+
+  selectCats(): Observable<Cat[]> {
+    return this.store.select(selectData);
   }
 }

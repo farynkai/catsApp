@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CatsListState } from './../../interfaces/cats-list';
-import { dataListFeatureKey } from './cats-list.reducer';
+import { CatsListState } from '../interfaces/cats-list';
+import { dataListFeatureKey } from './cats.reducers';
 
 export const selectDataTableState =
   createFeatureSelector<CatsListState>(dataListFeatureKey);

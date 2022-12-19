@@ -1,14 +1,27 @@
 <div class="container">
-  <h1 class="title text-center">Cats list</h1>
-  <div class="inputs-block mx-auto">
-    <input [formControl]="searchControl" type="search" class="form-control" placeholder="Search...">
-    <input [formControl]="limitValue" type="number" class="form-control" placeholder="Enter a number..." min="1" max="100">
-  </div>
+  <p>
+    <mat-toolbar color="primary">
+      <span>Cats App</span>
+      <span class="example-spacer"></span>
+    </mat-toolbar>
+  </p>
+
+  <form class="example-form inputs-block">
+    <mat-form-field class="example-full-width input">
+      <mat-label>Find a Cat</mat-label>
+      <input matInput [formControl]="searchControl" type="search" class="form-control" placeholder="Search...">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width input">
+      <mat-label>Select quantity</mat-label>
+      <input matInput [formControl]="limitValue" type="number" class="form-control" placeholder="Enter a number..." min="1" max="100">
+    </mat-form-field>
+  </form>
   
   <ul class="cats-list" >
-    <li class="cat-item" *ngFor="let cat of cats">
+    <li class="cat-item" *ngFor="let cat of cats$ | async">
       <img class="cat-img" src="{{cat.url}}" alt="cat-image">
-      <div class="text-center fs-5 fw-semibold">{{ cat.breeds.length === 0 ? 'Mutt' : cat.breeds[0].name }}</div>
+      <div matStepLabel class="cat-title">{{ cat.breeds.length === 0 ? 'Mutt' : cat.breeds[0].name }}</div>
     </li>
   </ul>
 </div>
