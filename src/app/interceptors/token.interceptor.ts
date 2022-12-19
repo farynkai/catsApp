@@ -18,12 +18,6 @@ export class TokenInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const newRequest = request.clone({
-      // setParams: {
-      //   limit: this.catsService.limit.toString(),
-      //   has_breeds: '1',
-      //   order: 'DESC',
-      //   api_key: environment.apiKey,
-      // },
       params: request.params
         .append('limit', this.catsService.limit)
         .append('has_breeds', 1)

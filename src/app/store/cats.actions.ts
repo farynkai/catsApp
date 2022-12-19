@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export const setFilterBy = createAction(
-  '[Cats List] Set Filter By Properties and Query',
+  '[Cats List] Set Filter By Query',
   props<{ filters: { query: string } }>()
 );
 

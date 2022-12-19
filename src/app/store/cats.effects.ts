@@ -1,13 +1,7 @@
 import { CatsService } from './../services/cats.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  setFilterBy,
-  setListData,
-  setListDataSuccess,
-  showError,
-} from './cats.actions';
-import { Store } from '@ngrx/store';
+import { setListData, setListDataSuccess, showError } from './cats.actions';
 import { of } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
 

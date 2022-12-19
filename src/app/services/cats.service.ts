@@ -13,10 +13,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CatsService {
   limit: number = 10;
-  constructor(
-    private httpClient: HttpClient,
-    private store: Store<CatsListState>
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
   setLimit(limit: number): void {
     this.limit = limit;
@@ -24,9 +21,5 @@ export class CatsService {
 
   getCats(): Observable<Cat[]> {
     return this.httpClient.get<Cat[]>(`${environment.url}images/search`);
-  }
-
-  selectCats(): Observable<Cat[]> {
-    return this.store.select(selectData);
   }
 }
