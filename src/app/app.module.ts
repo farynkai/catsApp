@@ -13,9 +13,10 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { CatsService } from './services/cats.service';
 import { CatsModule } from './cats/cats.module';
 import { CatsEffects } from './store/cats.effects';
+import { UnsubscriberComponent } from './components/unsubscriber/unsubscriber.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, UnsubscriberComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
