@@ -7,8 +7,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { CatsRoutingModule } from './cats-routing.module';
+import { UnsubscriberComponent } from './components/unsubscriber/unsubcriber.component';
 @NgModule({
-  declarations: [CatsComponent],
+  declarations: [CatsComponent, UnsubscriberComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

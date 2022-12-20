@@ -4,7 +4,6 @@ import { map, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { filterData } from '../../store/cats.selectors';
 import { Cat } from '../../interfaces/сat';
@@ -12,14 +11,14 @@ import { CatsService } from '../../services/cats.service';
 import { setFilterBy, setListData } from '../../store/cats.actions';
 import { CatsListState } from '../../interfaces/cats-list';
 import { selectData } from './../../store/cats.selectors';
+import { UnsubscriberComponent } from './unsubscriber/unsubcriber.component';
 
 @Component({
   selector: 'app-cats',
   templateUrl: './cats.component.html',
   styleUrls: ['./cats.component.scss'],
 })
-export class CatsComponent implements OnInit, OnDestroy {
-  destroyed$ = new Subject<void>();
+export class CatsComponent extends UnsubscriberComponent implements OnInit {
   defaultLimit: number = 10;
   cats$: Observable<Cat[]>;
   searchControl = new FormControl('');
@@ -29,7 +28,9 @@ export class CatsComponent implements OnInit, OnDestroy {
     private catsService: CatsService,
     private store: Store<CatsListState>,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.store.dispatch(setListData());
@@ -62,9 +63,5 @@ export class CatsComponent implements OnInit, OnDestroy {
           this.cats$ = this.store.select(selectData);
         }
       });
-  }
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
