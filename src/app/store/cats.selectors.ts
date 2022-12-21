@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { CatsListState } from '../interfaces/cats-list';
 import { dataListFeatureKey } from './cats.reducers';
 
@@ -15,22 +16,12 @@ export const selectFilterQuery = createSelector(
   (state: CatsListState) => state.filterQuery
 );
 
-export const filterData = createSelector(
-  selectData,
-  selectFilterQuery,
-  (listData, filterQuery) => {
-    let filteredData = [...listData];
-    if (filterQuery !== '') {
-      filteredData = filteredData.filter((item) => {
-        let result = [];
-        if (item.breeds.length !== 0) {
-          result = item.breeds.filter((breedItem) =>
-            breedItem.name.toLowerCase().startsWith(filterQuery.toLowerCase())
-          );
-        }
-        return result.length !== 0;
-      });
-    }
-    return filteredData;
-  }
+export const selectFilteredData = createSelector(
+  selectDataTableState,
+  (state: CatsListState) => state.filteredData
+);
+
+export const selectLimit = createSelector(
+  selectDataTableState,
+  (state: CatsListState) => state.limit
 );

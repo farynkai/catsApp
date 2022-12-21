@@ -1,9 +1,14 @@
-import { CatsService } from './../services/cats.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { setListData, setListDataSuccess, showError } from './cats.actions';
 import { of } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
+
+import {
+  setListData,
+  setListDataSuccess,
+  setListDataFailed,
+} from './cats.actions';
+import { CatsService } from './../services/cats.service';
 
 @Injectable()
 export class CatsEffects {
@@ -16,7 +21,7 @@ export class CatsEffects {
           .pipe(map((cats) => setListDataSuccess({ data: cats })));
       }),
       catchError((httpError) => {
-        return of(showError({ httpError }));
+        return of(setListDataFailed({ httpError }));
       })
     )
   );

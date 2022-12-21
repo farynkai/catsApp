@@ -1,8 +1,9 @@
-import { Cat } from './../interfaces/сat';
-import { CatsService } from './../services/cats.service';
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
+
+import { Cat } from './../interfaces/сat';
+import { CatsService } from './../services/cats.service';
 
 @Injectable({
   providedIn: 'root',

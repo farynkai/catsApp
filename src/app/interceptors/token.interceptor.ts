@@ -1,5 +1,4 @@
-import { environment } from './../../environments/environment.prod';
-import { CatsService } from './../services/cats.service';
+import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
@@ -9,9 +8,13 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from './../../environments/environment.prod';
+import { CatsListState } from './../interfaces/cats-list';
+import { selectLimit } from './../store/cats.selectors';
+
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private catsService: CatsService) {}
+  constructor(private store: Store<CatsListState>) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -19,7 +22,7 @@ export class TokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const newRequest = request.clone({
       params: request.params
-        .append('limit', this.catsService.limit)
+        .append('limit', 10)
         .append('has_breeds', 1)
         .append('order', 'DESC')
         .append('api_key', environment.apiKey),

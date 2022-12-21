@@ -1,17 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 
-import { filterData } from '../../store/cats.selectors';
-import { Cat } from '../../interfaces/сat';
-import { CatsService } from '../../services/cats.service';
-import { setFilterBy, setListData } from '../../store/cats.actions';
-import { CatsListState } from '../../interfaces/cats-list';
-import { selectData } from './../../store/cats.selectors';
-import { UnsubscriberComponent } from './unsubscriber/unsubcriber.component';
+import { Cat } from '../../../interfaces/сat';
+import { setFilterBy, setListData } from '../../../store/cats.actions';
+import { CatsListState } from '../../../interfaces/cats-list';
+import { selectData } from '../../../store/cats.selectors';
+import { UnsubscriberComponent } from '../unsubscriber/unsubcriber.component';
+import {
+  selectFilteredData,
+  selectLimit,
+} from './../../../store/cats.selectors';
+import { setListDataSuccess, setLimit } from './../../../store/cats.actions';
 
 @Component({
   selector: 'app-cats',
@@ -25,7 +28,6 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
   limitValue = new FormControl('');
 
   constructor(
-    private catsService: CatsService,
     private store: Store<CatsListState>,
     private activatedRoute: ActivatedRoute
   ) {
@@ -34,18 +36,19 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(setListData());
-    this.cats$ = this.activatedRoute.data.pipe(
+    this.activatedRoute.data.pipe(
       map((data) => {
-        return data['cat'];
+        this.store.dispatch(setListDataSuccess(data['cat']));
       })
     );
+    this.cats$ = this.store.select(selectData);
 
     this.searchControl.valueChanges
       .pipe(takeUntil(this.destroyed$))
       .subscribe((query) => {
         if (query !== null) {
           this.store.dispatch(setFilterBy({ filters: { query } }));
-          this.cats$ = this.store.select(filterData);
+          this.cats$ = this.store.select(selectFilteredData);
         }
       });
 
@@ -53,14 +56,14 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((query) => {
         if (query === null) {
-          this.catsService.setLimit(this.defaultLimit);
+          this.store.dispatch(setLimit({ dataLimit: this.defaultLimit }));
           this.store.dispatch(setListData());
         }
         let limit = Number(query);
         if (query !== null && limit >= 1 && limit <= 100) {
-          this.catsService.setLimit(limit);
+          this.store.dispatch(setLimit({ dataLimit: limit }));
+          console.log(this.store.select(selectLimit));
           this.store.dispatch(setListData());
-          this.cats$ = this.store.select(selectData);
         }
       });
   }
