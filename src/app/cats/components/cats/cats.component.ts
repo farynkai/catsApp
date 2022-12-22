@@ -62,7 +62,6 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
         let limit = Number(query);
         if (query !== null && limit >= 1 && limit <= 100) {
           this.store.dispatch(setLimit({ dataLimit: limit }));
-          console.log(this.store.select(selectLimit));
           this.store.dispatch(setListData());
         }
       });

@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-unsubscriber',
   template: `<p>unsubcriber</p>`,
-  styleUrls: ['./unsubscriber.component.css'],
 })
 export class UnsubscriberComponent implements OnDestroy {
   destroyed$ = new Subject<void>();

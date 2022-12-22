@@ -26,14 +26,14 @@ export const catsListReducer = createReducer(
       filterQuery: filters.query,
       filteredData: (function () {
         let filteredCats = [...state.listData];
-        if (state.filterQuery !== '') {
+        if (filters.query !== '') {
           filteredCats = filteredCats.filter((item) => {
             let result = [];
             if (item.breeds.length !== 0) {
               result = item.breeds.filter((breedItem) =>
                 breedItem.name
                   .toLowerCase()
-                  .startsWith(state.filterQuery.toLowerCase())
+                  .startsWith(filters.query.toLowerCase())
               );
             }
             return result.length !== 0;
