@@ -4,5 +4,5 @@ export interface CatsListState {
   listData: Cat[];
   filterQuery: string;
   filteredData: Cat[];
-  limit: number;
+  limit: number | null;
 }
