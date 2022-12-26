@@ -2,7 +2,7 @@ import { ErrorService } from './../services/error.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { mergeMap, map, catchError, tap } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 
 import {
   getListData,
