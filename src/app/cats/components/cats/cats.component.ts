@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { takeUntil, tap } from 'rxjs/operators';
+import {
+  AbstractControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,14 +23,46 @@ import { catsNumber } from './../../../global-variables/limit';
 })
 export class CatsComponent extends UnsubscriberComponent implements OnInit {
   cats$ = this.store.select(selectData);
-  searchControl = new FormControl('');
-  limitValue = new FormControl('');
+  filterForm!: UntypedFormGroup;
+
+  get filterFormControls(): { [key: string]: AbstractControl } {
+    return this.filterForm.controls;
+  }
 
   constructor(
+    private fb: UntypedFormBuilder,
     private store: Store<CatsListState>,
     private activatedRoute: ActivatedRoute
   ) {
     super();
+    this.initFilterForm();
+  }
+
+  private initFilterForm(): void {
+    this.filterForm = this.fb.group({
+      searchByBreedInput: [],
+      setLimitInput: [],
+    });
+
+    this.filterForm.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        let filterQuery = this.filterFormControls['searchByBreedInput'].value;
+        let limitQuery = this.filterFormControls['setLimitInput'].value;
+        let limit = Number(limitQuery);
+        if (filterQuery === '' && limitQuery === null) {
+          catsNumber.limit = 10;
+          this.store.dispatch(getListData());
+          this.cats$ = this.store.select(selectData);
+        } else if (filterQuery !== null && limitQuery === null) {
+          this.store.dispatch(setFilterBy({ filters: { query: filterQuery } }));
+          this.cats$ = this.store.select(selectFilteredData);
+        } else if (limitQuery !== null && limit >= 1 && limit <= 100) {
+          catsNumber.limit = limit;
+          this.store.dispatch(getListData());
+          this.cats$ = this.store.select(selectData);
+        }
+      });
   }
 
   ngOnInit() {
@@ -34,29 +70,6 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         this.store.dispatch(setListData({ data: data['cat'] }));
-      });
-
-    this.searchControl.valueChanges
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((query) => {
-        if (query !== null) {
-          this.store.dispatch(setFilterBy({ filters: { query } }));
-          this.cats$ = this.store.select(selectFilteredData);
-        }
-      });
-
-    this.limitValue.valueChanges
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((query) => {
-        if (query === null) {
-          catsNumber.limit = 10;
-          this.store.dispatch(getListData());
-        }
-        let limit = Number(query);
-        if (query !== null && limit >= 1 && limit <= 100) {
-          catsNumber.limit = limit;
-          this.store.dispatch(getListData());
-        }
       });
   }
 }

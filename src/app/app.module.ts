@@ -13,6 +13,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { CatsService } from './services/cats.service';
 import { CatsModule } from './cats/cats.module';
 import { CatsEffects } from './store/cats.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +28,10 @@ import { CatsEffects } from './store/cats.effects';
     StoreModule.forRoot({}),
     StoreModule.forFeature(dataListFeatureKey, CatsListReducer),
     AppRoutingModule,
+    StoreDevtoolsModule.instrument({
+      name: 'NgRx Demo App',
+      logOnly: environment.production,
+    }),
   ],
   providers: [
     CatsService,

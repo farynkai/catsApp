@@ -7,7 +7,6 @@ export const INITIAL_STATE: CatsListState = {
   listData: [],
   filterQuery: '',
   filteredData: [],
-  limit: null,
 };
 
 export const dataListFeatureKey = 'catsList';

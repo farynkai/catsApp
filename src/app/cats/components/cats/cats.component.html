@@ -6,15 +6,15 @@
     </mat-toolbar>
   </p>
 
-  <form class="example-form inputs-block">
+  <form [formGroup]="filterForm" class="example-form inputs-block">
     <mat-form-field class="example-full-width input">
       <mat-label>Find a Cat</mat-label>
-      <input matInput [formControl]="searchControl" type="search" class="form-control">
+      <input matInput formControlName="searchByBreedInput" type="search" class="form-control">
     </mat-form-field>
 
     <mat-form-field class="example-full-width input">
       <mat-label>Select quantity</mat-label>
-      <input matInput [formControl]="limitValue" type="number" class="form-control" min="1" max="100">
+      <input matInput formControlName="setLimitInput" type="number" class="form-control" min="1" max="100">
     </mat-form-field>
   </form>
   

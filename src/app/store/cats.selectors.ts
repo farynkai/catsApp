@@ -20,8 +20,3 @@ export const selectFilteredData = createSelector(
   selectDataTableState,
   (state: CatsListState) => state.filteredData
 );
-
-export const selectLimit = createSelector(
-  selectDataTableState,
-  (state: CatsListState) => state.limit
-);
