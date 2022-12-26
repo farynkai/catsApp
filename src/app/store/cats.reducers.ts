@@ -11,20 +11,23 @@ export const INITIAL_STATE: CatsListState = {
 
 export const dataListFeatureKey = 'catsList';
 
-export const catsListReducer = createReducer(
+export function CatsListReducer(state: CatsListState, action: Action) {
+  return catsListReducer(state, action);
+}
+
+const catsListReducer = createReducer(
   INITIAL_STATE,
-  on(setListDataSuccess, (state, { data }) => {
-    return {
-      ...state,
-      listData: data,
-    };
-  }),
-  on(setListData, (state, { data }) => {
-    return {
-      ...state,
-      listData: data,
-    };
-  }),
+
+  on(setListDataSuccess, (state, { data }) => ({
+    ...state,
+    listData: data,
+  })),
+
+  on(setListData, (state, { data }) => ({
+    ...state,
+    listData: data,
+  })),
+
   on(setFilterBy, (state, { filters }) => {
     let filteredCats = [...state.listData];
     if (filters.query !== '') {
@@ -46,6 +49,4 @@ export const catsListReducer = createReducer(
   })
 );
 
-export function CatsListReducer(state: CatsListState, action: Action) {
-  return catsListReducer(state, action);
-}
+

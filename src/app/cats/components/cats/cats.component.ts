@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 import {
   AbstractControl,
   UntypedFormBuilder,
@@ -7,6 +6,7 @@ import {
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 import { setFilterBy, getListData } from '../../../store/cats.actions';
 import { CatsListState } from '../../../interfaces/cats-list';
@@ -44,9 +44,9 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
       setLimitInput: [],
     });
 
-    this.filterForm.valueChanges
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
+    this.filterForm.valueChanges.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(() => {
         let filterQuery = this.filterFormControls['searchByBreedInput'].value;
         let limitQuery = this.filterFormControls['setLimitInput'].value;
         let limit = Number(limitQuery);
@@ -65,11 +65,11 @@ export class CatsComponent extends UnsubscriberComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
-    this.activatedRoute.data
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        this.store.dispatch(setListData({ data: data['cat'] }));
-      });
+  ngOnInit(): void {
+    this.activatedRoute.data.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((data) => {
+      this.store.dispatch(setListData({ data: data['cat'] }));
+    });
   }
 }

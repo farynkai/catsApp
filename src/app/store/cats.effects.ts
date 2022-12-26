@@ -1,4 +1,3 @@
-import { ErrorService } from './../services/error.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -10,25 +9,25 @@ import {
   setListDataFailed,
 } from './cats.actions';
 import { CatsService } from './../services/cats.service';
+import { ToastService } from '../services/toast.service';
 
 @Injectable()
 export class CatsEffects {
   constructor(
     private actions$: Actions,
     private catsService: CatsService,
-    private errorService: ErrorService
+    private toastService: ToastService
   ) {}
 
-  getCats$ = createEffect(() =>
-    this.actions$.pipe(
+  getCats$ = createEffect(() => this.actions$.pipe(
       ofType(getListData),
       mergeMap(() => {
-        return this.catsService
-          .getCats()
-          .pipe(map((cats) => setListDataSuccess({ data: cats })));
+        return this.catsService.getCats().pipe(
+          map((cats) => setListDataSuccess({ data: cats }))
+        );
       }),
       catchError((httpError) => {
-        this.errorService.showError(httpError);
+        this.toastService.showError(httpError);
         return of(setListDataFailed({ httpError }));
       })
     )

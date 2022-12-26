@@ -3,18 +3,19 @@ import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
-import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { dataListFeatureKey, CatsListReducer } from './store/cats.reducers';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { CatsService } from './services/cats.service';
 import { CatsModule } from './cats/cats.module';
 import { CatsEffects } from './store/cats.effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,9 +30,10 @@ import { environment } from 'src/environments/environment';
     StoreModule.forFeature(dataListFeatureKey, CatsListReducer),
     AppRoutingModule,
     StoreDevtoolsModule.instrument({
-      name: 'NgRx Demo App',
+      name: 'NgRx Cat App',
       logOnly: environment.production,
     }),
+    MatSnackBarModule,
   ],
   providers: [
     CatsService,
